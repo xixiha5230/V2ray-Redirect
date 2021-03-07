@@ -1,0 +1,24 @@
+                "users": [
+                    {
+                        "id": "***your uuid***",
+                        "encryption": "none",
+                        "level": 0
+                    }
+                ]
+            }
+        ]
+    },
+    "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+            "allowInsecure": true,
+            "serverName": "***your server name***"
+        },
+        "wsSettings": {
+            "connectionReuse": true,
+            "path": "***your path***",
+            "headers": {
+                "Host": "***your host***"
+            }
+        },

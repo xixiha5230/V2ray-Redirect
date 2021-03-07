@@ -1,0 +1,5 @@
+buildOpenwrtDoc/BuildV2ray.md
+dnsmasq
+xray/*.json
+xray/xray
+antiad.sh

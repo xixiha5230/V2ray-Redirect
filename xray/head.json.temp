@@ -1,0 +1,38 @@
+{
+    "log": {
+        "access": "",
+        "error": "warning.log",
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "tag": "transparent",
+            "port": 1080,
+            "protocol": "dokodemo-door",
+            "settings": {
+                "network": "tcp,udp",
+                "followRedirect": true
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "tproxy": "redirect"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "tag": "proxy",
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "104.19.112.161",
+                        "port": 443,

@@ -1,0 +1,134 @@
+{
+    "log": {
+        "access": "",
+        "error": "warning.log",
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "tag": "transparent",
+            "port": 1080,
+            "protocol": "dokodemo-door",
+            "settings": {
+                "network": "tcp,udp",
+                "followRedirect": true
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "tproxy": "redirect"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "tag": "proxy",
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "104.19.112.161",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "***your uuid***",
+                                "encryption": "none",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "tls",
+                "tlsSettings": {
+                    "allowInsecure": true,
+                    "serverName": "***your server name***"
+                },
+                "wsSettings": {
+                    "connectionReuse": true,
+                    "path": "***your path***",
+                    "headers": {
+                        "Host": "***your host***"
+                    }
+                },
+                "httpSettings": null,
+                "quicSettings": null,
+                "sockopt": {
+                    "mark": 34
+                }
+            },
+            "mux": {
+                "enabled": true,
+                "concurrency": 8
+            }
+        },
+        {
+            "tag": "direct",
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIP"
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 34
+                }
+            }
+        },
+        {
+            "tag": "block",
+            "protocol": "blackhole",
+            "settings": {
+                "response": {
+                    "type": "http"
+                }
+            }
+        }
+    ],
+    "routing": {
+        "domainStrategy": "IPOnDemand",
+        "rules": [
+            {
+                "type": "field",
+                "outboundTag": "direct",
+                "network": "tcp,udp",
+                "protocol": [
+                    "bittorrent"
+                ]
+            },
+            {
+                "type": "field",
+                "outboundTag": "direct",
+                "network": "tcp,udp",
+                "domain": [
+                    "geosite:cn",
+                    "geosite:private",
+                    "geosite:apple-cn",
+                    "geosite:tld-cn"
+                ]
+            },
+            {
+                "type": "field",
+                "outboundTag": "direct",
+                "network": "tcp,udp",
+                "ip": [
+                    "geoip:cn",
+                    "geoip:private"
+                ]
+            },
+            {
+                "type": "field",
+                "outboundTag": "proxy",
+                "network": "tcp,udp"
+            }
+        ]
+    }
+}
